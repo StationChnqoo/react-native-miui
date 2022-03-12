@@ -1,0 +1,32 @@
+{
+  "name": "react-native-miui",
+  "version": "1.0.0",
+  "description": "React Native 通用组件库，设计规范、反馈参考 MIUI 7，现在还是感觉 MI 2s 是巅峰之作。",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChenqiaoStation/react-native-miui.git"
+  },
+  "keywords": [
+    "react-native-ui",
+    "react-native-miui",
+    "MIUI",
+    "HarmonyOS",
+    "react-native-elements",
+    "ant-design",
+    "ant-design-mobile",
+    "material-design",
+    "ColorOS",
+    "Taro",
+    "react-native-botton"
+  ],
+  "author": "i@cctv3.net",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChenqiaoStation/react-native-miui/issues"
+  },
+  "homepage": "https://github.com/ChenqiaoStation/react-native-miui#readme"
+}
