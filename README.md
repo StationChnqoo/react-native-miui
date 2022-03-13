@@ -40,3 +40,7 @@ import { Button } from "react-native-miui";
 ### 🍀 Version 1.0.0
 
 🍀 Published react-native-miui@1.0.0 -> `花🌹里🍐胡🐯哨🔥`。
+
+#### Version 1.1.0
+
+🆕 新增徽章标签 `Bage`。
