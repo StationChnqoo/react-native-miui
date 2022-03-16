@@ -86,15 +86,13 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
         />
       }
       renderItem={(info) => (
-        <View
-          style={[
-            { flexDirection: "row", justifyContent: "space-around" },
-            props?.contentContainerStyle ?? null,
-          ]}
-        >
+        <View style={[{ flexDirection: "row" }]}>
           {Array.from({ length: numColumns }, (_, i) => (
             <View
-              style={{ width: `${100 / numColumns}%` }}
+              style={[
+                { width: `${100 / numColumns}%` },
+                props?.contentContainerStyle ?? null,
+              ]}
               key={`Column ${i + 1}`}
             >
               {props.data.map((__, _i) => {
