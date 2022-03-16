@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, ReactElement } from "react";
+import React, {JSXElementConstructor, ReactElement} from 'react';
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -8,9 +8,9 @@ import {
   ViewStyle,
   VirtualizedList,
   RefreshControl,
-} from "react-native";
+} from 'react-native';
 
-import * as Animatable from "react-native-animatable";
+import * as Animatable from 'react-native-animatable';
 
 interface WaterfallProps<ItemT> {
   data: ItemT[];
@@ -19,10 +19,7 @@ interface WaterfallProps<ItemT> {
   animationDuration?: number;
   animationDelay?: number;
   contentContainerStyle?: StyleProp<ViewStyle>;
-  onEndReached?:
-    | ((info: { distanceFromEnd: number }) => void)
-    | null
-    | undefined;
+  onEndReached?: (info: {distanceFromEnd: number}) => void;
   onEndReachedThreshold?: number | null | undefined;
   onRefresh?: () => void;
   onScroll?:
@@ -39,7 +36,7 @@ interface WaterfallProps<ItemT> {
   renderItem: (
     item: ItemT,
     column: number,
-    i: number
+    i: number,
   ) => ReactElement<any, string | JSXElementConstructor<any>>;
 }
 
@@ -69,42 +66,49 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
   return (
     <VirtualizedList
       {...defaultProps}
-      data={[""]}
-      getItemCount={(data) => 1}
+      data={['']}
+      getItemCount={data => 1}
       getItem={(data, index) => data[index]}
-      style={[{ flex: 1 }, props?.style ?? {}]}
+      style={[{flex: 1}, props?.style ?? {}]}
       onScroll={props?.onScroll ?? props.onScroll}
       keyExtractor={(item, index) => `react-native-miui`}
       ListHeaderComponent={props?.ListHeaderComponent ?? null}
       ListEmptyComponent={props?.ListEmptyComponent ?? null}
       ListFooterComponent={props?.ListFooterComponent ?? null}
-      onEndReached={props?.onEndReached && props.onEndReached}
+      onEndReached={info => {
+        /**
+         * 🐞 有可能刚进来的时候，`props.data` 还没进来，但是他认为已经到达底部了。
+         * console.log(`info.distanceFromEnd: ${info.distanceFromEnd}`);
+         * info.distanceFromEnd > 16 && props?.onEndReached && props.onEndReached(info)
+         */
+        if (props.data.length > 0) {
+          props?.onEndReached && props.onEndReached(info);
+        }
+      }}
       refreshControl={
         <RefreshControl
           refreshing={props.refreshing ?? false}
           onRefresh={props?.onRefresh && props.onRefresh}
         />
       }
-      renderItem={(info) => (
-        <View style={[{ flexDirection: "row" }]}>
-          {Array.from({ length: numColumns }, (_, i) => (
+      renderItem={info => (
+        <View style={[{flexDirection: 'row'}]}>
+          {Array.from({length: numColumns}, (_, i) => (
             <View
               style={[
-                { width: `${100 / numColumns}%` },
+                {width: `${100 / numColumns}%`},
                 props?.contentContainerStyle ?? null,
               ]}
-              key={`Column ${i + 1}`}
-            >
+              key={`Column ${i + 1}`}>
               {props.data.map((__, _i) => {
                 if (_i % numColumns == i) {
                   return (
                     <Animatable.View
                       useNativeDriver={true}
                       delay={(_i % pageSize) * animationDelay}
-                      animation={"fadeInDown"}
+                      animation={'fadeInDown'}
                       duration={animationDuration}
-                      key={`Column ${i + 1} --> Datas[${_i}]`}
-                    >
+                      key={`Column ${i + 1} --> Datas[${_i}]`}>
                       {props.renderItem(__, i, _i)}
                     </Animatable.View>
                   );
