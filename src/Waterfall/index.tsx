@@ -120,16 +120,6 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
   );
 };
 
-const styles = StyleSheet.create({
-  view: {
-    flex: 1,
-    alignItems: "center",
-  },
-  viewColumns: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-});
+const styles = StyleSheet.create({});
 
 export default Waterfall;
