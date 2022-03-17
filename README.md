@@ -32,23 +32,5 @@ PS: 在 `2022年3月13号` 的凌晨 `12点`，创建了 `raect-native-miui` 仓
 ## 🤔 如何使用
 
 ```javascript
-import { Button } from "react-native-miui";
+import {Button} from 'react-native-miui';
 ```
-
-## 😱 版本更新记录
-
-### 🍀 Version 1.0.0
-
-🍀 Published react-native-miui@1.0.0 -> `花🌹里🍐胡🐯哨🔥`。
-
-#### Version 1.2.1
-
-💄 新增瀑布流 `Waterall` 动画可配置选项 `animationDuration` & `animationDelay`。
-
-#### Version 1.2.0
-
-🆕 新增瀑布流 `Waterfall`。
-
-#### Version 1.1.0
-
-🆕 新增徽章标签 `Bage`。

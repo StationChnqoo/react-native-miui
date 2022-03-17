@@ -11,13 +11,16 @@ import {
 } from 'react-native';
 
 import * as Animatable from 'react-native-animatable';
+import {CommonAnimationActions} from '../../types';
 
 interface WaterfallProps<ItemT> {
+  /**
+   * FlastList 规范的 PropTypes，命名都一模一样，功能也一模一样。
+   * 请参考: https://www.react-native.cn/docs/flatlist
+   */
   data: ItemT[];
   pageSize?: number;
   numColumns?: number | undefined;
-  animationDuration?: number;
-  animationDelay?: number;
   contentContainerStyle?: StyleProp<ViewStyle>;
   onEndReached?: (info: {distanceFromEnd: number}) => void;
   onEndReachedThreshold?: number | null | undefined;
@@ -38,6 +41,8 @@ interface WaterfallProps<ItemT> {
     column: number,
     i: number,
   ) => ReactElement<any, string | JSXElementConstructor<any>>;
+  /** 动画相关 */
+  animation?: CommonAnimationActions;
 }
 
 /**
@@ -54,8 +59,12 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
   const onEndReachedThreshold = props?.onEndReachedThreshold ?? 0.2;
   const scrollEventThrottle = props?.scrollEventThrottle ?? 100;
   const pageSize = props?.pageSize ?? 10;
-  const animationDelay = props?.animationDelay ?? 200;
-  const animationDuration = props?.animationDuration ?? 618;
+
+  const animation = props?.animation ?? {
+    type: 'fadeInDown',
+    duration: 1000,
+    delay: 200,
+  };
 
   const defaultProps = {
     showsVerticalScrollIndicator,
@@ -105,9 +114,9 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
                   return (
                     <Animatable.View
                       useNativeDriver={true}
-                      delay={(_i % pageSize) * animationDelay}
-                      animation={'fadeInDown'}
-                      duration={animationDuration}
+                      delay={(_i % pageSize) * animation.delay}
+                      animation={animation.type}
+                      duration={animation.duration}
                       key={`Column ${i + 1} --> Datas[${_i}]`}>
                       {props.renderItem(__, i, _i)}
                     </Animatable.View>
