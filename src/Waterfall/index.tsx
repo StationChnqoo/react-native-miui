@@ -20,7 +20,7 @@ interface WaterfallProps<ItemT> {
    */
   data: ItemT[];
   /** 是都允许下拉刷新 */
-  bounces: boolean;
+  bounces?: boolean;
   numColumns?: number | undefined;
   contentContainerStyle?: StyleProp<ViewStyle>;
   onEndReached?: (info: {distanceFromEnd: number}) => void;
@@ -46,7 +46,6 @@ interface WaterfallProps<ItemT> {
   animation?: CommonAnimationActions;
   /** 自定义属性 */
   pageSize?: number;
-  disableRefreShcontrol?: boolean;
 }
 
 /**
