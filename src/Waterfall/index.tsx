@@ -19,7 +19,8 @@ interface WaterfallProps<ItemT> {
    * 请参考: https://www.react-native.cn/docs/flatlist
    */
   data: ItemT[];
-  pageSize?: number;
+  /** 是都允许下拉刷新 */
+  bounces: boolean;
   numColumns?: number | undefined;
   contentContainerStyle?: StyleProp<ViewStyle>;
   onEndReached?: (info: {distanceFromEnd: number}) => void;
@@ -43,6 +44,9 @@ interface WaterfallProps<ItemT> {
   ) => ReactElement<any, string | JSXElementConstructor<any>>;
   /** 动画相关 */
   animation?: CommonAnimationActions;
+  /** 自定义属性 */
+  pageSize?: number;
+  disableRefreShcontrol?: boolean;
 }
 
 /**
@@ -52,12 +56,15 @@ interface WaterfallProps<ItemT> {
  * @returns
  */
 const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
+  const bounces = props?.bounces ?? true;
   const numColumns = props?.numColumns ?? 2;
   const showsVerticalScrollIndicator =
     props?.showsVerticalScrollIndicator ?? false;
   const removeClippedSubviews = props?.removeClippedSubviews ?? true;
   const onEndReachedThreshold = props?.onEndReachedThreshold ?? 0.2;
   const scrollEventThrottle = props?.scrollEventThrottle ?? 100;
+
+  /** 自定义属性 */
   const pageSize = props?.pageSize ?? 10;
 
   const animation = props?.animation ?? {
@@ -67,6 +74,7 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
   };
 
   const defaultProps = {
+    bounces,
     showsVerticalScrollIndicator,
     removeClippedSubviews,
     onEndReachedThreshold,
