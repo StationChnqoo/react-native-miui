@@ -66,8 +66,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
     {
       autoHideController: false,
       autoHideTimeout: 3000,
-      colorDone: 'white',
-      colorCached: '#987123',
+      colorDone: '#987123',
+      colorCached: 'white',
       colorTotal: '#666',
     },
     props?.controllerConfig ?? {},
@@ -126,6 +126,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
     }
     return () => {};
   }, [touched]);
+
+  useEffect(() => {
+    if (props.paused != pause) {
+      setPause(!pause);
+    }
+    return () => {};
+  }, [props.paused]);
 
   return (
     <TouchableOpacity

@@ -31,13 +31,13 @@ const ProgressBar: React.FC<ProgressBarProps> = props => {
       <View
         style={[
           styles.viewCache,
-          {width: cacheX, backgroundColor: config.colorDone},
+          {width: cacheX, backgroundColor: config.colorCached},
         ]}
       />
       <View
         style={[
           styles.viewCurrect,
-          {width: doneX, backgroundColor: config.colorCached},
+          {width: doneX, backgroundColor: config.colorDone},
         ]}
       />
     </View>
