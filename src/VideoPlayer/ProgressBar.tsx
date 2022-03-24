@@ -21,7 +21,7 @@ const ProgressBar: React.FC<ProgressBarProps> = props => {
     }
     return () => {};
   }, [progress, width]);
-  
+
   return (
     <View
       style={[styles.view, {backgroundColor: config.colorTotal}]}
@@ -48,16 +48,18 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     height: 3,
+    borderRadius: 1.5,
     flexDirection: 'row',
     alignItems: 'center',
   },
   viewCache: {
     height: 3,
+    borderRadius: 1.5,
     position: 'absolute',
   },
   viewCurrect: {
     height: 3,
-    borderRadius: 2,
+    borderRadius: 1.5,
     position: 'absolute',
   },
 });

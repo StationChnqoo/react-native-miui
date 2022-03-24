@@ -10,9 +10,15 @@ import {
   ViewStyle,
 } from 'react-native';
 import Video from 'react-native-video';
-import {ControllerConfig, LoadingConfig, ProgressProps} from '../../types';
+import {
+  ControllerConfig,
+  LoadedConfig,
+  LoadingConfig,
+  ProgressProps,
+} from '../../types';
 import LoadingView from './LoadingView';
 import ProgressBar from './ProgressBar';
+import LoadedView from './LoadedView';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -38,7 +44,8 @@ interface VideoPlayerProps {
   onProgress?: (time: ProgressProps) => void;
   /** 自定义属性 */
   style: StyleProp<ViewStyle>;
-  loadConfig?: LoadingConfig;
+  loadingConfig?: LoadingConfig;
+  loadedConfig?: LoadedConfig;
   controllerConfig?: ControllerConfig;
 }
 
@@ -59,9 +66,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
   const resizeMode = props?.resizeMode ?? 'stretch';
   const style = props?.style ?? {};
   const pictureInPicture = props?.pictureInPicture ?? false;
-  const progressUpdateInterval = props?.progressUpdateInterval ?? 1000;
+  const progressUpdateInterval = props?.progressUpdateInterval ?? 100;
 
-  const loadConfig = props?.loadConfig ?? Object.create(null);
+  const loadingConfig = props?.loadingConfig ?? Object.create(null);
+  const loadedConfig = props?.loadedConfig ?? Object.create(null);
+
   const controllerConfig = Object.assign(
     {
       autoHideController: false,
@@ -99,11 +108,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
   useEffect(() => {
     if (progress?.total && progress?.current) {
       setShowLoading(false);
-      console.log(
-        `react-native-miui/Video Cached: ${timeFormat(
-          progress.cached,
-        )}/${timeFormat(progress.total)}`,
-      );
       setProgressStr([
         timeFormat(progress.current),
         timeFormat(progress.total),
@@ -124,7 +128,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
         clearTimeout(timer);
       }, controllerConfig.autoHideTimeout);
     }
-    return () => {};
+    return () => {
+      timer && clearTimeout(timer);
+    };
   }, [touched]);
 
   useEffect(() => {
@@ -141,30 +147,50 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
       onPress={() => {
         !touched && setTouched(true);
       }}>
-      <Video
-        {...defaultProps}
-        ref={ref => (player.current = ref)}
-        style={{height: '100%', width: '100%', position: 'absolute'}}
-        paused={pause}
-        controls={false}
-        onProgress={data => {
-          setProgress({
-            current: parseInt(`${data.currentTime}`),
-            cached: parseInt(`${data.playableDuration}`),
-            total: parseInt(`${data.seekableDuration}`),
-          });
-        }}
-      />
-      <LoadingView config={loadConfig} status={showLoading} />
+      {finished ? (
+        <LoadedView
+          config={loadedConfig}
+          onPlayPress={() => {
+            setShowController(true);
+            setShowLoading(true);
+            setFinished(false);
+            setPause(false);
+            player.current?.seek(0);
+          }}
+        />
+      ) : (
+        <Video
+          {...defaultProps}
+          ref={ref => (player.current = ref)}
+          style={{height: '100%', width: '100%', position: 'absolute'}}
+          paused={pause}
+          onProgress={data => {
+            console.log(data.currentTime);
+            setProgress({
+              current: Math.round(data.currentTime),
+              cached: Math.round(data.playableDuration),
+              total: Math.round(data.seekableDuration),
+            });
+          }}
+        />
+      )}
+      <LoadingView config={loadingConfig} status={showLoading} />
       {showController ? (
         <View style={styles.viewBottom}>
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => {
               if (finished) {
-                setProgress(Object.assign({}, progress, {current: 0}));
-                setPause(false);
-                player.current.seek(0);
+                // setPause(false);
+                // player.current?.seek(0);
+                /**
+                 * 这个地方暂时有个 `🐞 BUG` 未能解决。
+                 * https://github.com/react-native-video/react-native-video/issues/1979
+                 * When video starts in 'paused' state the onProgress event does not fire on Android #1979
+                 * dylanjha opened this issue on 22 Apr 2020 · 9 comments
+                 * 当你通过 `paused` 进行视频重播的时候，`onProgress()` 在 `Android` 平台上面不能回调。
+                 * 所以只能曲线救国，播放结束的时候，加载另一个 `View`，主动点击这个 `View` 的 `播放 ▶️` 按钮，这个时候重新加载 `Video` 并且重置所有状态。
+                 */
               } else {
                 setPause(t => !t);
               }
@@ -201,6 +227,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#333',
   },
   viewBottom: {
     paddingVertical: 8,

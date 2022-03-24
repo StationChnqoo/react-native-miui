@@ -95,8 +95,13 @@ export type ControllerConfig = {
   colorTotal?: string;
 };
 
-/** 加载设置 */
+/** 加载过程设置 */
 export type LoadingConfig = {
   cover?: ImageRequireSource | ImageURISource;
   view?: ReactElement<any, string | JSXElementConstructor<any>>;
+};
+
+/** 加载完成设置 */
+export type LoadedConfig = {
+  cover?: ImageRequireSource | ImageURISource;
 };
