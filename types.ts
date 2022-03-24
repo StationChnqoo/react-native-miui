@@ -1,3 +1,6 @@
+import {JSXElementConstructor, ReactElement} from 'react';
+import {ImageRequireSource, ImageURISource} from 'react-native';
+
 export type CommonAnimationTypes =
   | 'bounce'
   | 'flash'
@@ -66,4 +69,34 @@ export type CommonAnimationActions = {
   type: CommonAnimationTypes;
   duration: number;
   delay: number;
+};
+
+/** 播放进度，单位: 秒 */
+export type ProgressProps = {
+  /** 当前进度 */
+  current: number;
+  /** 已经缓冲的进度 */
+  cached: number;
+  /** 视频总长度 */
+  total: number;
+};
+
+/** 进度条配置 */
+export type ControllerConfig = {
+  /** 自动隐藏进度条 */
+  autoHideController?: boolean;
+  /** 自动隐藏进度条，单位: 毫秒 */
+  autoHideTimeout?: number;
+  /** 已经播放完部分的进度条颜色 */
+  colorDone?: string;
+  /** 加载完成部分的进度条颜色 */
+  colorCached?: string;
+  /** 整个进度条的颜色 */
+  colorTotal?: string;
+};
+
+/** 加载设置 */
+export type LoadingConfig = {
+  cover?: ImageRequireSource | ImageURISource;
+  view?: ReactElement<any, string | JSXElementConstructor<any>>;
 };
