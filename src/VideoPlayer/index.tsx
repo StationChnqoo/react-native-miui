@@ -202,8 +202,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = props => {
                 progress.total == progress.current
                   ? require('../../images/video_success.png')
                   : pause
-                  ? require('../../images/video_pause.png')
-                  : require('../../images/video_play.png')
+                  ? require('../../images/video_play.png')
+                  : require('../../images/video_pause.png')
               }
               style={{height: 24, width: 24, tintColor: 'white'}}
             />

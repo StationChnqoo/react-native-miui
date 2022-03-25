@@ -28,9 +28,9 @@ const LoadingView: React.FC<LoadingViewProps> = props => {
       ) : null}
       {config?.view ?? (
         <View style={{alignItems: 'center'}}>
-          <Chase size={32} color="white" />
+          <Chase size={64} color="white" />
           <View style={{height: 16}} />
-          <Text style={{color: 'white', fontSize: 12}}>正在缓冲 ~</Text>
+          <Text style={{color: 'white', fontSize: 14}}>正在缓冲 ~</Text>
         </View>
       )}
     </View>

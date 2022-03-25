@@ -1,4 +1,9 @@
-import React, {JSXElementConstructor, ReactElement} from 'react';
+import React, {
+  JSXElementConstructor,
+  ReactElement,
+  useEffect,
+  useRef,
+} from 'react';
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -46,6 +51,8 @@ interface WaterfallProps<ItemT> {
   animation?: CommonAnimationActions;
   /** 自定义属性 */
   pageSize?: number;
+  /** 是否滚动到顶部 */
+  isScroll2Top?: boolean;
 }
 
 /**
@@ -55,6 +62,7 @@ interface WaterfallProps<ItemT> {
  * @returns
  */
 const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
+  const waterfall = useRef();
   const bounces = props?.bounces ?? true;
   const numColumns = props?.numColumns ?? 2;
   const showsVerticalScrollIndicator =
@@ -65,7 +73,7 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
 
   /** 自定义属性 */
   const pageSize = props?.pageSize ?? 10;
-
+  const isScroll2Top = props?.isScroll2Top ?? false;
   const animation = props?.animation ?? {
     type: 'fadeInDown',
     duration: 1000,
@@ -79,10 +87,19 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
     onEndReachedThreshold,
     scrollEventThrottle,
   };
+
+  useEffect(() => {
+    // @ts-ignore
+    isScroll2Top && waterfall.current.scrollToOffset({animated: true, y: 0});
+    return () => {};
+  }, [isScroll2Top]);
+
   return (
     <VirtualizedList
       {...defaultProps}
       data={['']}
+      // @ts-ignore
+      ref={ref => (waterfall.current = ref)}
       getItemCount={data => 1}
       getItem={(data, index) => data[index]}
       style={[{flex: 1}, props?.style ?? {}]}
