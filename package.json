@@ -1,6 +1,6 @@
 {
   "name": "react-native-miui",
-  "version": "1.3.7",
+  "version": "1.4.0",
   "description": "React Native 通用组件库，设计规范、反馈参考 MIUI 7，现在还是感觉 MI 2s 是巅峰之作。",
   "main": "index.ts",
   "scripts": {
@@ -34,6 +34,7 @@
   "homepage": "https://github.com/ChenqiaoStation/react-native-miui#readme",
   "dependencies": {
     "react-native-animatable": "^1.3.3",
-    "react-native-animated-spinkit": "^1.5.2"
+    "react-native-animated-spinkit": "^1.5.2",
+    "react-native-x-utils": "^1.3.7"
   }
 }
