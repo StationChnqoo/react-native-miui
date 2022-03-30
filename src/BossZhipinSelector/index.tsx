@@ -27,7 +27,7 @@ interface BossZhipinSelectorProps {
   /** 标题 */
   title?: string;
   /** 标题样式 */
-  titleStyle: StyleProp<TextStyle>;
+  titleStyle?: StyleProp<TextStyle>;
 
   /** Tab 指示器部分 */
   /** 上方 Tab 的选中和未选中的样式 */

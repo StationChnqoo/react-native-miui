@@ -11,30 +11,43 @@ import {
 import {useDip} from 'react-native-x-utils';
 
 export interface TabsProps {
+  /** 整体样式 */
   style?: StyleProp<ViewStyle>;
+  /** Tab 之间的距离 */
   distanceBetweenItems?: number;
+  /** 文字和指示器之间的距离 */
   distanceTextDot?: number;
+
+  /** 激活和未激活 Tab 的样式 */
+  /** 标题样式 */
   activeTextStyle?: StyleProp<TextStyle>;
   inactiveTextStyle?: StyleProp<TextStyle>;
+  /** 指示器样式 */
   activeDotStyle?: StyleProp<ViewStyle>;
   inactiveDotStyle?: StyleProp<ViewStyle>;
+
+  /** 激活 Tab 的 Index */
   activeIndex?: number;
+  /** 数据源，暂不支持泛型 <T>，没必要 */
   tabLabels: string[];
+  /** Tab 的点击事件 */
   onTabPress: (label: string, index: number) => void;
 }
 
 const Tabs: React.FC<TabsProps> = props => {
-  const {onTabPress} = props;
+  const {
+    onTabPress,
+    style,
+    activeTextStyle,
+    inactiveTextStyle,
+    activeDotStyle,
+    inactiveDotStyle,
+    distanceBetweenItems,
+    distanceTextDot,
+  } = props;
   const [index, setIndex] = useState(0);
   const activeIndex = props?.activeIndex ?? 0;
   const tabLabels = props?.tabLabels ?? [];
-  const activeTextStyle = props?.activeTextStyle ?? {};
-  const inactiveTextStyle = props?.inactiveTextStyle ?? {};
-  const activeDotStyle = props?.activeDotStyle ?? {};
-  const inactiveDotStyle = props?.inactiveDotStyle ?? {};
-  const distanceBetweenItems = props?.distanceBetweenItems ?? 12;
-  const distanceTextDot = props?.distanceTextDot ?? 8;
-  const style = props?.style ?? {};
 
   useEffect(() => {
     if (activeIndex != index) {
@@ -59,23 +72,23 @@ const Tabs: React.FC<TabsProps> = props => {
               style={{
                 alignItems: 'center',
                 marginRight:
-                  i == tabLabels.length - 1 ? 0 : distanceBetweenItems,
+                  i == tabLabels.length - 1 ? 0 : distanceBetweenItems ?? 16,
               }}>
               <Text
-                style={[
-                  active ? styles.activeTextStyle : styles.inactiveTextStyle,
-                  ,
-                  active ? activeTextStyle : inactiveTextStyle,
-                ]}>
+                style={
+                  active
+                    ? [styles.activeTextStyle, activeTextStyle]
+                    : [styles.inactiveTextStyle, inactiveTextStyle]
+                }>
                 {it}
               </Text>
-              <View style={{height: distanceTextDot}} />
+              <View style={{height: distanceTextDot ?? 8}} />
               <View
-                style={[
-                  active ? styles.activeDotStyle : styles.inactiveDotStyle,
-                  ,
-                  active ? activeDotStyle : inactiveDotStyle,
-                ]}
+                style={
+                  active
+                    ? [styles.activeDotStyle, activeDotStyle]
+                    : [styles.inactiveDotStyle, inactiveDotStyle]
+                }
               />
             </View>
           </TouchableOpacity>
