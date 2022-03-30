@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   StyleProp,
   StyleSheet,
@@ -6,7 +6,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 
 interface BageProps {
   /** 整体的样式 */
@@ -18,23 +18,22 @@ interface BageProps {
 }
 
 enum rankColors {
-  "#ff5252",
-  "#ffb50e",
-  "#abc",
-  "#f58a0e",
-  "#aaa",
+  '#ff5252',
+  '#ffb50e',
+  '#abc',
+  '#f58a0e',
+  '#aaa',
 }
 
-const Bage: React.FC<BageProps> = (props) => {
+const Bage: React.FC<BageProps> = props => {
   const rank = props?.rank ?? 0;
   return (
     <View
       style={[
         styles.view,
         props?.style ?? {},
-        { backgroundColor: rankColors[Math.min(rank, 4)] },
-      ]}
-    >
+        {backgroundColor: rankColors[Math.min(rank, 4)]},
+      ]}>
       <Text style={[styles.fontStyle, props?.fontStyle ?? {}]}>
         {props.children}
       </Text>
@@ -44,14 +43,16 @@ const Bage: React.FC<BageProps> = (props) => {
 
 const styles = StyleSheet.create({
   view: {
-    alignItems: "center",
-    justifyContent: "center",
-    height: 24,
-    width: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 'auto',
+    width: 'auto',
+    padding: 2,
+    backgroundColor: '#F72033',
     borderRadius: 12,
   },
   fontStyle: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
   },
 });
