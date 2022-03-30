@@ -3,5 +3,6 @@ import Bage from './src/Bage';
 import Waterfall from './src/Waterfall';
 import VideoPlayer from './src/VideoPlayer';
 import Tabs from './src/Tabs';
+import BossZhipinSelector from './src/BossZhipinSelector';
 
-export {Button, Bage, VideoPlayer, Waterfall, Tabs};
+export {Button, Bage, VideoPlayer, Waterfall, Tabs, BossZhipinSelector};

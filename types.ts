@@ -105,3 +105,10 @@ export type LoadingConfig = {
 export type LoadedConfig = {
   cover?: ImageRequireSource | ImageURISource;
 };
+
+/** Boss直聘职位 */
+export type JobType = {
+  id: string;
+  name: string;
+  children?: JobType[];
+};

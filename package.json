@@ -1,6 +1,6 @@
 {
   "name": "react-native-miui",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "React Native 通用组件库，设计规范、反馈参考 MIUI 7，现在还是感觉 MI 2s 是巅峰之作。",
   "main": "index.ts",
   "scripts": {
@@ -24,7 +24,8 @@
     "react-native-botton",
     "react-native-video",
     "react-native-video-player",
-    "react-native-video-controls"
+    "react-native-video-controls",
+    "react-native-picker"
   ],
   "author": "i@cctv3.net",
   "license": "ISC",
@@ -35,6 +36,8 @@
   "dependencies": {
     "react-native-animatable": "^1.3.3",
     "react-native-animated-spinkit": "^1.5.2",
+    "react-native-modal": "^13.0.1",
+    "react-native-snap-carousel": "^3.9.1",
     "react-native-x-utils": "^1.3.7"
   }
 }
