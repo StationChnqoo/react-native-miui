@@ -1,3 +1,7 @@
+/**
+ * 目前还有个 BUG 有时间处理一下
+ * 当从第三个 `Tab` 手动切换到第一个 `Tab` 的时候，然后切换到第二个 `Tab`，这个时候向左滑动，就会报错。
+ */
 import React, {useEffect, useRef, useState} from 'react';
 import {
   ScrollView,
@@ -99,7 +103,7 @@ const BossZhipinSelector: React.FC<BossZhipinSelectorProps> = props => {
     setLabels([useBossZhipinJobs[0]]);
     return () => {};
   }, []);
-  
+
   return (
     <Modal
       style={styles.viewModal}
