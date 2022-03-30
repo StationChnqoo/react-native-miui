@@ -90,21 +90,26 @@ const BossZhipinSelector: React.FC<BossZhipinSelectorProps> = props => {
   } = props;
 
   useEffect(() => {
-    setData([useBossZhipinJobs, [], []]);
-    setLabels([useBossZhipinJobs[0]]);
-    return () => {};
-  }, []);
-
-  useEffect(() => {
     carousel?.current && carousel?.current.snapToItem(index, true);
     return () => {};
   }, [index]);
 
+  useEffect(() => {
+    setData([useBossZhipinJobs, [], []]);
+    setLabels([useBossZhipinJobs[0]]);
+    return () => {};
+  }, []);
+  
   return (
     <Modal
       style={styles.viewModal}
       onShow={onShow}
-      onModalHide={onHide}
+      onModalHide={() => {
+        setIndex(0);
+        setData([useBossZhipinJobs, [], []]);
+        setLabels([useBossZhipinJobs[0]]);
+        onHide && onHide();
+      }}
       isVisible={show}
       animationInTiming={618}
       animationOutTiming={618}
