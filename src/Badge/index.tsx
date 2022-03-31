@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-interface BageProps {
+interface BadgeProps {
   /** 整体的样式 */
   style?: StyleProp<ViewStyle>;
   /** 文字样式 */
@@ -25,7 +25,7 @@ enum rankColors {
   '#aaa',
 }
 
-const Bage: React.FC<BageProps> = props => {
+const Badge: React.FC<BadgeProps> = props => {
   const rank = props?.rank ?? 0;
   return (
     <View
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Bage;
+export default Badge;
