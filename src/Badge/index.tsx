@@ -26,17 +26,15 @@ enum rankColors {
 }
 
 const Badge: React.FC<BadgeProps> = props => {
-  const rank = props?.rank ?? 0;
+  const {rank = 0, style, fontStyle} = props;
   return (
     <View
       style={[
         styles.view,
-        props?.style ?? {},
+        style,
         {backgroundColor: rankColors[Math.min(rank, 4)]},
       ]}>
-      <Text style={[styles.fontStyle, props?.fontStyle ?? {}]}>
-        {props.children}
-      </Text>
+      <Text style={[styles.fontStyle, fontStyle]}>{props.children}</Text>
     </View>
   );
 };

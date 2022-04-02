@@ -63,22 +63,22 @@ interface WaterfallProps<ItemT> {
  */
 const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
   const waterfall = useRef();
-  const bounces = props?.bounces ?? true;
-  const numColumns = props?.numColumns ?? 2;
-  const showsVerticalScrollIndicator =
-    props?.showsVerticalScrollIndicator ?? false;
-  const removeClippedSubviews = props?.removeClippedSubviews ?? true;
-  const onEndReachedThreshold = props?.onEndReachedThreshold ?? 0.2;
-  const scrollEventThrottle = props?.scrollEventThrottle ?? 100;
-
-  /** 自定义属性 */
-  const pageSize = props?.pageSize ?? 10;
-  const isScroll2Top = props?.isScroll2Top ?? false;
-  const animation = props?.animation ?? {
-    type: 'fadeInDown',
-    duration: 1000,
-    delay: 200,
-  };
+  const {
+    bounces = true,
+    numColumns = 2,
+    showsVerticalScrollIndicator = false,
+    removeClippedSubviews = true,
+    onEndReachedThreshold = 0.2,
+    scrollEventThrottle = 100,
+    /** 自定义属性 */
+    pageSize = 10,
+    isScroll2Top = false,
+    animation = {
+      type: 'fadeInDown',
+      duration: 1000,
+      delay: 200,
+    },
+  } = props;
 
   const defaultProps = {
     bounces,
@@ -87,7 +87,7 @@ const Waterfall = <ItemT extends {}>(props: WaterfallProps<ItemT>) => {
     onEndReachedThreshold,
     scrollEventThrottle,
   };
-
+  
   useEffect(() => {
     // @ts-ignore
     isScroll2Top && waterfall.current.scrollToOffset({animated: true, y: 0});
