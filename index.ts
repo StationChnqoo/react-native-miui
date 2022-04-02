@@ -4,5 +4,14 @@ import Waterfall from './src/Waterfall';
 import VideoPlayer from './src/VideoPlayer';
 import Tabs from './src/Tabs';
 import BossZhipinSelector from './src/BossZhipinSelector';
+import Currency from './src/Currency';
 
-export {Button, Badge, VideoPlayer, Waterfall, Tabs, BossZhipinSelector};
+export {
+  Button,
+  Badge,
+  VideoPlayer,
+  Waterfall,
+  Tabs,
+  BossZhipinSelector,
+  Currency,
+};
