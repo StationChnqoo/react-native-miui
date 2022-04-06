@@ -112,3 +112,10 @@ export type JobType = {
   name: string;
   children?: JobType[];
 };
+
+/** Tabs 属性 */
+export type TabType = {
+  index: number;
+  name: string;
+  select: boolean;
+}
