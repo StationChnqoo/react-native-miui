@@ -117,6 +117,7 @@ const Tabs: React.FC<TabsProps> = props => {
             </TouchableOpacity>
           );
         }}
+        keyExtractor={(item, index) => `${index}`}
       />
     </View>
   );

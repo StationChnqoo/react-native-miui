@@ -5,6 +5,7 @@ import VideoPlayer from './src/VideoPlayer';
 import Tabs from './src/Tabs';
 import BossZhipinSelector from './src/BossZhipinSelector';
 import Currency from './src/Currency';
+import ViewPager from './src/ViewPager';
 
 export {
   Button,
@@ -14,4 +15,5 @@ export {
   Tabs,
   BossZhipinSelector,
   Currency,
+  ViewPager
 };

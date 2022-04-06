@@ -119,3 +119,10 @@ export type TabType = {
   name: string;
   select: boolean;
 }
+
+/** ViewPager */
+export type ScrollEvent = {
+  start: number;
+  end: number;
+  finish: boolean;
+};
