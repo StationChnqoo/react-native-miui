@@ -31,6 +31,34 @@ PS: 在 `2022年3月13号` 的凌晨 `12点`，创建了 `raect-native-miui` 仓
 
 ## 🤔 如何使用
 
+[Please visit doc.cctv3.net。](https://doc.cctv3.net)
+
+## 😡 已知问题
+
+### `TypeScript` 的支持
+
+[Using "useImperativeHandle" in a React functional component, with automatic TypeScript typing.](https://gist.github.com/Venryx/7cff24b17867da305fff12c6f8ef6f96)
+
+如果组件通过 `ref` 访问不到属性的时候，报错:
+
 ```javascript
-import {Button} from 'react-native-miui';
+Property 'xxx' does not exist on type 'never'.
+```
+
+请在项目根目录添加 `tsconfig.json`。
+
+```json
+{
+  "compilerOptions": {
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "lib": ["es5", "es6", "ESNext", "dom"],
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "alwaysStrict": true
+  }
+}
 ```
