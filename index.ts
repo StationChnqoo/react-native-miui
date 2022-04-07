@@ -6,6 +6,7 @@ import Tabs from './src/Tabs';
 import BossZhipinSelector from './src/BossZhipinSelector';
 import Currency from './src/Currency';
 import ViewPager from './src/ViewPager';
+import Switcher from './src/Switcher';
 
 export {
   Button,
@@ -16,4 +17,5 @@ export {
   BossZhipinSelector,
   Currency,
   ViewPager,
+  Switcher,
 };
