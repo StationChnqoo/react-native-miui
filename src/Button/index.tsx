@@ -47,6 +47,7 @@ const Button: React.FC<ButtonProps> = props => {
     onPress,
     icon,
     onLongPress,
+    activeOpacity = 0.88,
   } = props;
   let fontSize = fontStyle.hasOwnProperty('fontSize')
     ? // @ts-ignore
@@ -77,7 +78,7 @@ const Button: React.FC<ButtonProps> = props => {
       onPress={() => {
         onPress?.();
       }}
-      activeOpacity={props?.activeOpacity ?? 0.618}
+      activeOpacity={activeOpacity}
       onLongPress={() => {
         onLongPress?.();
       }}>

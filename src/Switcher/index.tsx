@@ -12,7 +12,10 @@ export interface ButtonProps {
   /** 选中的状态 */
   status: boolean;
   /** 状态更改时的回调 */
-  onStatusChange: (status: boolean) => void;
+  onStatusChange?: (status: boolean) => void;
+  /** 禁止点击 */
+  disabled?: boolean;
+  /** 动画配置 */
   animationConfig?: SwitcherAnimationConfig;
 }
 
@@ -22,6 +25,7 @@ const Switcher: React.FC<ButtonProps> = props => {
     inactiveColor = '#d8d8d8',
     size = 24,
     status = false,
+    disabled = false,
     onStatusChange,
     animationConfig = {},
   } = props;
@@ -51,6 +55,7 @@ const Switcher: React.FC<ButtonProps> = props => {
 
   return (
     <TouchableOpacity
+      disabled={disabled}
       activeOpacity={1}
       style={[
         defaultStyles.viewSwitcher,

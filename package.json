@@ -1,6 +1,6 @@
 {
   "name": "react-native-miui",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "React Native 通用组件库，参照 `MIUI 7` 的设计效果，致力于给用户更好的体验。只要时间允许我会每周 `Pulish` 一个组件。争取以后 `UI` 组件库直接用 `MIUI` 全家桶就可以了。",
   "main": "index.ts",
   "scripts": {
