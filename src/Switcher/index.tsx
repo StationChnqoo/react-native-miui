@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Animated, StyleSheet, TouchableOpacity} from 'react-native';
+import {SwitcherAnimationConfig} from '../../types';
 
 export interface ButtonProps {
   /** 选中的状态的颜色 默认白色 */
@@ -12,6 +13,7 @@ export interface ButtonProps {
   status: boolean;
   /** 状态更改时的回调 */
   onStatusChange: (status: boolean) => void;
+  animationConfig?: SwitcherAnimationConfig;
 }
 
 const Switcher: React.FC<ButtonProps> = props => {
@@ -21,7 +23,9 @@ const Switcher: React.FC<ButtonProps> = props => {
     size = 24,
     status = false,
     onStatusChange,
+    animationConfig = {},
   } = props;
+  const {velocity = 0, tension = 1, friction = 2} = animationConfig;
   const [select, setSelect] = useState(false);
   const [slider, setSlider] = useState(
     new Animated.ValueXY({x: status ? size + 1 : 1, y: 0}),
@@ -34,8 +38,20 @@ const Switcher: React.FC<ButtonProps> = props => {
     return () => {};
   }, [status]);
 
+  useEffect(() => {
+    Animated.spring(slider, {
+      toValue: {x: select ? size + 1 : 1, y: 0},
+      velocity,
+      tension,
+      friction,
+      useNativeDriver: true,
+    }).start();
+    return () => {};
+  }, [select]);
+
   return (
     <TouchableOpacity
+      activeOpacity={1}
       style={[
         defaultStyles.viewSwitcher,
         {
@@ -48,13 +64,6 @@ const Switcher: React.FC<ButtonProps> = props => {
       onPress={() => {
         let _status = !select;
         setSelect(_status);
-        Animated.spring(slider, {
-          toValue: {x: select ? 1 : size + 1, y: 0}, // 目标值
-          velocity: 0, // 附着在弹簧上物体的初始速度 默认: 0
-          tension: 1, // 控制速度 默认: 40
-          friction: 4, // 控制弹性 / 过冲 默认: 7
-          useNativeDriver: true,
-        }).start();
         onStatusChange?.(_status);
       }}>
       <Animated.View
@@ -81,7 +90,6 @@ const defaultStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    display: 'flex',
   },
 });
 

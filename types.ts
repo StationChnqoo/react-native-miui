@@ -118,11 +118,21 @@ export type TabType = {
   index: number;
   name: string;
   select: boolean;
-}
+};
 
 /** ViewPager */
 export type ScrollEvent = {
   start: number;
   end: number;
   finish: boolean;
+};
+
+/** Switcher 动画 */
+export type SwitcherAnimationConfig = {
+  /** 附着在弹簧上物体的初始速度 默认: 0 */
+  velocity?: number;
+  /** 控制速度 默认: 40 */
+  tension?: number;
+  /** 控制弹性 / 过冲 默认: 7 */
+  friction?: number;
 };
