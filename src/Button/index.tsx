@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Image,
   ImageRequireSource,
@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View,
   ViewStyle,
-} from "react-native";
+} from 'react-native';
 
 type IconProps = {
   /** 按钮图标 */
@@ -39,56 +39,66 @@ interface ButtonProps {
   activeOpacity?: number;
 }
 
-const Button: React.FC<ButtonProps> = (props) => {
-  let fontSize = (props?.fontStyle ?? {}).hasOwnProperty("fontSize")
+const Button: React.FC<ButtonProps> = props => {
+  const {
+    style,
+    fontStyle = {},
+    disabled = false,
+    onPress,
+    icon,
+    onLongPress,
+  } = props;
+  let fontSize = fontStyle.hasOwnProperty('fontSize')
     ? // @ts-ignore
-      props.fontStyle.fontSize
+      fontStyle.fontSize
     : 16;
+
+  const loadIcon = () => {
+    if (icon) {
+      const {source, style = {tintColor: 'white'}, distance = 8} = icon;
+      return (
+        <View style={{alignItems: 'center', flexDirection: 'row'}}>
+          <Image
+            source={source}
+            style={[{height: fontSize, width: fontSize}, style]}
+          />
+          <View style={{width: distance}} />
+        </View>
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <TouchableOpacity
-      disabled={props?.disabled}
-      style={[
-        styles.view,
-        props?.style ?? null,
-        props?.disabled && { opacity: 0.618 },
-      ]}
+      disabled={disabled}
+      style={[styles.view, style, disabled && {opacity: 0.618}]}
       onPress={() => {
-        props?.onPress && props.onPress();
+        onPress?.();
       }}
       activeOpacity={props?.activeOpacity ?? 0.618}
       onLongPress={() => {
-        props?.onLongPress && props.onLongPress();
-      }}
-    >
-      {props?.icon && (
-        <Image
-          source={props.icon.source}
-          style={[
-            { height: fontSize, width: fontSize },
-            props.icon?.style ?? null,
-          ]}
-        />
-      )}
-      {props?.icon?.distance && <View style={{ width: props.icon.distance }} />}
-      <Text style={[styles.fontStyle, styles?.fontStyle ?? {}]}>
-        {props?.children}
-      </Text>
+        onLongPress?.();
+      }}>
+      {loadIcon()}
+      <Text style={[styles.fontStyle, fontStyle]}>{props?.children}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   view: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#987123",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#987123',
     borderRadius: 4,
     height: 44,
-    justifyContent: "center",
+    justifyContent: 'center',
     paddingHorizontal: 4,
   },
   fontStyle: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
   },
 });
