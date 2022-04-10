@@ -7,6 +7,7 @@ import BossZhipinSelector from './src/BossZhipinSelector';
 import Currency from './src/Currency';
 import ViewPager from './src/ViewPager';
 import Switcher from './src/Switcher';
+import Counter from './src/Counter';
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   Currency,
   ViewPager,
   Switcher,
+  Counter,
 };
