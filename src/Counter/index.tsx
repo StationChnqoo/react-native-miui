@@ -82,6 +82,7 @@ const Counter: React.FC<CounterProps> = props => {
           horizontal={true}
           ref={ref => (counter.current = ref)}
           showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
           scrollEnabled={false}
           bounces={false}
           data={Array.from({length: 99}, (_, i) => i)}
