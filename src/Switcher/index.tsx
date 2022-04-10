@@ -11,8 +11,8 @@ export interface ButtonProps {
   size?: number;
   /** 选中的状态 */
   status: boolean;
-  /** 状态更改时的回调 */
-  onStatusChange?: (status: boolean) => void;
+  /** 开源被点击的时候的回调，因为这个地方可能需要某些情况下阻止状态更改，所以把处理 `status` 的权利交给用户自己。 */
+  onPress?: () => void;
   /** 禁止点击 */
   disabled?: boolean;
   /** 动画配置 */
@@ -26,32 +26,24 @@ const Switcher: React.FC<ButtonProps> = props => {
     size = 24,
     status = false,
     disabled = false,
-    onStatusChange,
+    onPress,
     animationConfig = {},
   } = props;
   const {velocity = 0, tension = 1, friction = 2} = animationConfig;
-  const [select, setSelect] = useState(false);
   const [slider, setSlider] = useState(
     new Animated.ValueXY({x: status ? size + 1 : 1, y: 0}),
   );
 
   useEffect(() => {
-    if (status !== select) {
-      setSelect(!select);
-    }
-    return () => {};
-  }, [status]);
-
-  useEffect(() => {
     Animated.spring(slider, {
-      toValue: {x: select ? size + 1 : 1, y: 0},
+      toValue: {x: status ? size + 1 : 1, y: 0},
       velocity,
       tension,
       friction,
       useNativeDriver: true,
     }).start();
     return () => {};
-  }, [select]);
+  }, [status]);
 
   return (
     <TouchableOpacity
@@ -62,15 +54,11 @@ const Switcher: React.FC<ButtonProps> = props => {
         {
           height: size,
           width: size * 2,
-          backgroundColor: select ? activeColor : inactiveColor,
+          backgroundColor: status ? activeColor : inactiveColor,
           borderRadius: size / 2,
         },
       ]}
-      onPress={() => {
-        let _status = !select;
-        setSelect(_status);
-        onStatusChange?.(_status);
-      }}>
+      onPress={onPress}>
       <Animated.View
         style={{
           position: 'absolute',
