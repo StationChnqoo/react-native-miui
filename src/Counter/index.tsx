@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  FlatList,
+  ScrollView,
   StyleProp,
   StyleSheet,
   Text,
@@ -25,10 +25,11 @@ export interface CounterProps {
   valueFontStyle?: StyleProp<TextStyle>;
   onMinusPress?: () => void;
   onAddPress?: () => void;
+  range?: {max: number; min: number};
 }
 
 const Counter: React.FC<CounterProps> = props => {
-  const counter = useRef<FlatList>();
+  const counter = useRef<ScrollView>();
   const [index, setIndex] = useState(0);
 
   /** 默认自定义按钮 */
@@ -47,17 +48,19 @@ const Counter: React.FC<CounterProps> = props => {
     renderAddButton = renderButton('+', index >= 999 ? 0.28 : 1),
     renderMinusButton = renderButton('-', index <= 1 ? 0.28 : 1),
     value = 1,
-    valueContentStyle,
+    valueContentStyle = {},
     valueFontStyle = {},
     onAddPress,
     onMinusPress,
+    range = {max: 99, min: 1},
   } = props;
+
+  // @ts-ignore
+  const {height = 32, width = 32} = valueContentStyle;
 
   useEffect(() => {
     setIndex(value);
-    setTimeout(() => {
-      counter.current?.scrollToIndex({animated: true, index: value});
-    }, 100);
+    counter.current?.scrollTo({y: (value - 1) * height, animated: true});
     return function () {};
   }, [value]);
 
@@ -78,23 +81,26 @@ const Counter: React.FC<CounterProps> = props => {
         {renderMinusButton}
       </TouchableOpacity>
       <View style={[styles.viewValueContent, valueContentStyle]}>
-        <FlatList
-          horizontal={true}
+        <ScrollView
           ref={ref => (counter.current = ref)}
           showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
           scrollEnabled={false}
-          bounces={false}
-          data={Array.from({length: 99}, (_, i) => i)}
-          renderItem={info => (
-            <View style={[styles.viewValueContent, valueContentStyle]}>
+          bounces={false}>
+          {Array.from({length: range.max - range.min + 1}, (_, i) => (
+            <View
+              key={i}
+              style={{
+                height,
+                width,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <Text style={[styles.textValue, valueFontStyle]}>
-                {info.item}
+                {range.min + i}
               </Text>
             </View>
-          )}
-          keyExtractor={(item, index) => `Counter --> ${index}`}
-        />
+          ))}
+        </ScrollView>
       </View>
       <TouchableOpacity
         activeOpacity={0.618}
@@ -110,7 +116,6 @@ const styles = StyleSheet.create({
   view: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 128,
     justifyContent: 'space-between',
   },
   viewButton: {},
@@ -119,7 +124,6 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   viewValueContent: {
-    width: 32,
     height: 32,
     justifyContent: 'center',
     alignItems: 'center',
