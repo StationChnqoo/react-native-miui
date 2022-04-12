@@ -1,8 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
-  FlatList,
-  ListRenderItemInfo,
+  ScrollView,
   StyleProp,
   StyleSheet,
   View,
@@ -18,7 +17,7 @@ interface ViewPagerProps {
   /** 是否有动画效果 */
   enableScrollAnimation?: boolean;
   /** 渲染什么布局，把决定权交给你自己，我只管给你空间 */
-  renderItem: (info: ListRenderItemInfo<React.ReactNode>) => React.ReactNode;
+  renderItem: (item: any, index: number) => React.ReactNode;
 
   /** 每个 Item 的样式 */
   /** `ViewPager` 的宽度取其中的 `width` */
@@ -38,7 +37,7 @@ const ViewPager: React.FC<ViewPagerProps> = props => {
     finish: false,
   });
 
-  let viewPager = useRef<FlatList>();
+  let viewPager = useRef<ScrollView>();
 
   const {
     index = 0,
@@ -67,7 +66,10 @@ const ViewPager: React.FC<ViewPagerProps> = props => {
   useEffect(() => {
     if (index != currentIndex) {
       setCurrentIndex(index);
-      viewPager.current.scrollToIndex({index, animated: enableScrollAnimation});
+      viewPager.current.scrollTo({
+        x: (index - 1) * itemStyle.width,
+        animated: enableScrollAnimation,
+      });
     }
     return function () {};
   }, [index]);
@@ -78,7 +80,7 @@ const ViewPager: React.FC<ViewPagerProps> = props => {
   }, [currentIndex]);
 
   return (
-    <FlatList
+    <ScrollView
       decelerationRate={'fast'}
       snapToInterval={itemStyle.width}
       onScrollBeginDrag={e => {
@@ -100,14 +102,14 @@ const ViewPager: React.FC<ViewPagerProps> = props => {
       disableIntervalMomentum={true}
       bounces={false}
       showsHorizontalScrollIndicator={false}
-      data={datas}
       horizontal={true}
-      ref={ref => (viewPager.current = ref)}
-      renderItem={info => (
-        <View style={[styles.viewItem, itemStyle]}>{renderItem(info)}</View>
-      )}
-      keyExtractor={(item, index) => `${index}`}
-    />
+      ref={ref => (viewPager.current = ref)}>
+      {datas.map((it, i) => (
+        <View key={i} style={[styles.viewItem, itemStyle]}>
+          {renderItem(it, i)}
+        </View>
+      ))}
+    </ScrollView>
   );
 };
 
