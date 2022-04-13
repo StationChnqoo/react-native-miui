@@ -1,40 +1,36 @@
+/** 设计参考的是 react-navigation 里面的 `Badge` */
 import React from 'react';
-import {
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
 interface BadgeProps {
-  /** 整体的样式 */
-  style?: StyleProp<ViewStyle>;
-  /** 文字样式 */
-  fontStyle?: StyleProp<TextStyle>;
-  /** 排名 */
-  rank?: number;
-}
-
-enum rankColors {
-  '#ff5252',
-  '#ffb50e',
-  '#abc',
-  '#f58a0e',
-  '#aaa',
+  /** 尺寸 */
+  size?: number;
+  /** 外显数字 */
+  value: string;
+  /** 颜色 */
+  color?: {
+    text?: string;
+    container?: string;
+  };
 }
 
 const Badge: React.FC<BadgeProps> = props => {
-  const {rank = 0, style, fontStyle} = props;
+  const {size = 20, value, color = {}} = props;
+  const _color = Object.assign({}, {container: '#ff5252', text: '#fff'}, color);
   return (
     <View
       style={[
         styles.view,
-        style,
-        {backgroundColor: rankColors[Math.min(rank, 4)]},
+        {
+          borderRadius: size / 2,
+          height: size,
+          minWidth: size,
+          backgroundColor: _color.container,
+        },
       ]}>
-      <Text style={[styles.fontStyle, fontStyle]}>{props.children}</Text>
+      <Text style={{fontSize: Math.floor(size * 0.618), color: _color.text}}>
+        {value}
+      </Text>
     </View>
   );
 };
@@ -43,15 +39,7 @@ const styles = StyleSheet.create({
   view: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 'auto',
-    width: 'auto',
-    padding: 2,
-    backgroundColor: '#F72033',
-    borderRadius: 12,
-  },
-  fontStyle: {
-    color: 'white',
-    fontSize: 16,
+    paddingHorizontal: 4,
   },
 });
 
