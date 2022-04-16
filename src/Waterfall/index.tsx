@@ -10,20 +10,18 @@ import React, {
   JSXElementConstructor,
   ReactElement,
   RefAttributes,
-  useEffect,
   useRef,
 } from 'react';
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  RefreshControl,
   StyleProp,
   StyleSheet,
   View,
   ViewStyle,
   VirtualizedList,
-  RefreshControl,
 } from 'react-native';
-
 import * as Animatable from 'react-native-animatable';
 import {CommonAnimationActions} from '../../types';
 
@@ -65,8 +63,6 @@ interface WaterfallProps<ItemT> {
   animation?: CommonAnimationActions;
   /** 自定义属性 */
   pageSize?: number;
-  /** 是否滚动到顶部 */
-  isScroll2Top?: boolean;
 }
 
 interface WaterfallRefProps {
@@ -88,6 +84,7 @@ export const Waterfall = React.forwardRef(
   ) => {
     let waterfall = useRef();
     const {
+      data = [],
       bounces = true,
       numColumns = 2,
       showsVerticalScrollIndicator = false,
@@ -96,7 +93,6 @@ export const Waterfall = React.forwardRef(
       scrollEventThrottle = 100,
       /** 自定义属性 */
       pageSize = 10,
-      isScroll2Top = false,
       animation = {
         type: 'fadeInDown',
         duration: 1000,
@@ -107,6 +103,7 @@ export const Waterfall = React.forwardRef(
       contentContainerStyle,
       onRefresh,
       onScroll,
+      onEndReached,
     } = props;
 
     const defaultProps = {
@@ -116,12 +113,6 @@ export const Waterfall = React.forwardRef(
       onEndReachedThreshold,
       scrollEventThrottle,
     };
-
-    useEffect(() => {
-      // @ts-ignore
-      isScroll2Top && waterfall.current.scrollToOffset({animated: true, y: 0});
-      return () => {};
-    }, [isScroll2Top]);
 
     React.useImperativeHandle(ref, () => ({
       scrollToOffset: (params: ScrollToOffset) => {
@@ -134,7 +125,7 @@ export const Waterfall = React.forwardRef(
     return (
       <VirtualizedList
         {...defaultProps}
-        data={['']}
+        data={['react-native-miui/waterfall']}
         // @ts-ignore
         ref={ref => (waterfall.current = ref)}
         getItemCount={data => 1}
@@ -151,9 +142,7 @@ export const Waterfall = React.forwardRef(
            * console.log(`info.distanceFromEnd: ${info.distanceFromEnd}`);
            * info.distanceFromEnd > 16 && props?.onEndReached && props.onEndReached(info)
            */
-          if (props.data.length > 0) {
-            props?.onEndReached && props.onEndReached(info);
-          }
+          data.length > 0 && onEndReached?.(info);
         }}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -162,7 +151,7 @@ export const Waterfall = React.forwardRef(
           <View style={[{flexDirection: 'row'}, contentContainerStyle]}>
             {Array.from({length: numColumns}, (_, i) => (
               <View key={`Column ${i + 1}`}>
-                {props.data.map((__, _i) => {
+                {data.map((__, _i) => {
                   if (_i % numColumns == i) {
                     return (
                       <Animatable.View
