@@ -1,4 +1,5 @@
 /**
+ * 没有给图片尺寸的时候，默认从左到右依次排列
  * TypeScript
  * https://gist.github.com/Venryx/7cff24b17867da305fff12c6f8ef6f96
  *
