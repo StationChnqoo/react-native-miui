@@ -79,8 +79,8 @@ interface WaterfallRefProps {
  */
 
 export const Waterfall = React.forwardRef(
-  <T1 extends any>(
-    props: WaterfallProps<T1>,
+  <T extends any>(
+    props: WaterfallProps<T>,
     ref: React.Ref<WaterfallRefProps>,
   ) => {
     let waterfall = useRef();
@@ -181,7 +181,7 @@ export const Waterfall = React.forwardRef(
 
 const styles = StyleSheet.create({});
 
-type Handle<T> = T extends ForwardRefExoticComponent<RefAttributes<infer T2>>
+type Handle<T1> = T1 extends ForwardRefExoticComponent<RefAttributes<infer T2>>
   ? T2
   : never;
 
