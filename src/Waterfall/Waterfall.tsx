@@ -47,7 +47,7 @@ interface WaterfallProps<ItemT> {
   onScroll?:
     | ((event: NativeSyntheticEvent<NativeScrollEvent>) => void)
     | undefined;
-  refreshing?: boolean | null | undefined;
+  refreshing?: boolean;
   removeClippedSubviews?: boolean | undefined;
   scrollEventThrottle?: number | undefined;
   showsVerticalScrollIndicator?: boolean | undefined;
@@ -105,6 +105,7 @@ export const Waterfall = React.forwardRef(
       onRefresh,
       onScroll,
       onEndReached,
+      renderItem,
     } = props;
 
     const defaultProps = {
@@ -155,13 +156,14 @@ export const Waterfall = React.forwardRef(
                 {data.map((__, _i) => {
                   if (_i % numColumns == i) {
                     return (
+                      // @ts-ignore
                       <Animatable.View
                         useNativeDriver={true}
                         delay={(_i % pageSize) * animation.delay}
                         animation={animation.type}
                         duration={animation.duration}
                         key={`Column ${i + 1} --> Datas[${_i}]`}>
-                        {props.renderItem(__, i, _i)}
+                        {renderItem(__, i, _i)}
                       </Animatable.View>
                     );
                   } else {

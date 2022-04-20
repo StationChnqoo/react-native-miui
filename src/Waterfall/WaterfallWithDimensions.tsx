@@ -11,7 +11,9 @@ import React, {
   JSXElementConstructor,
   ReactElement,
   RefAttributes,
+  useEffect,
   useRef,
+  useState,
 } from 'react';
 import {
   NativeScrollEvent,
@@ -22,10 +24,7 @@ import {
   View,
   ViewStyle,
   VirtualizedList,
-  Dimensions
 } from 'react-native';
-import * as Animatable from 'react-native-animatable';
-import {CommonAnimationActions} from '../../types';
 
 type ScrollToOffset = {
   y: number;
@@ -48,7 +47,7 @@ interface WaterfallWithDimensionsProps<ItemT> {
   onScroll?:
     | ((event: NativeSyntheticEvent<NativeScrollEvent>) => void)
     | undefined;
-  refreshing?: boolean | null | undefined;
+  refreshing?: boolean;
   removeClippedSubviews?: boolean | undefined;
   scrollEventThrottle?: number | undefined;
   showsVerticalScrollIndicator?: boolean | undefined;
@@ -59,12 +58,7 @@ interface WaterfallWithDimensionsProps<ItemT> {
   renderItem: (
     item: ItemT,
     column: number,
-    i: number,
   ) => ReactElement<any, string | JSXElementConstructor<any>>;
-  /** 动画相关 */
-  animation?: CommonAnimationActions;
-  /** 自定义属性 */
-  pageSize?: number;
 }
 
 interface WaterfallRefProps {
@@ -80,7 +74,7 @@ interface WaterfallRefProps {
  */
 
 export const WaterfallWithDimensions = React.forwardRef(
-  <T1 extends any>(
+  <T1 extends {dimension: {height: number; width: number}}>(
     props: WaterfallWithDimensionsProps<T1>,
     ref: React.Ref<WaterfallRefProps>,
   ) => {
@@ -93,19 +87,13 @@ export const WaterfallWithDimensions = React.forwardRef(
       removeClippedSubviews = true,
       onEndReachedThreshold = 0.2,
       scrollEventThrottle = 100,
-      /** 自定义属性 */
-      pageSize = 10,
-      animation = {
-        type: 'fadeInDown',
-        duration: 1000,
-        delay: 200,
-      },
       refreshing = false,
       style,
       contentContainerStyle,
       onRefresh,
       onScroll,
       onEndReached,
+      renderItem,
     } = props;
 
     const defaultProps = {
@@ -123,6 +111,45 @@ export const WaterfallWithDimensions = React.forwardRef(
         waterfall.current.scrollToOffset({animated, y});
       },
     }));
+
+    const [datas, setDatas] = useState<T1[][]>([]);
+
+    /**
+     * 更新 `datas` 前，当前所有列的最短的一列
+     * 因为分页的时候，`{data} = props`进来的时候，是一个 `concat(...)` 以后的数组
+     * 所以目前的方案是 `data` 一进来，所有的高度重置，重新进行计算
+     * @param _datas
+     * @returns Math.max(0, index);
+     */
+    const findMinColumnIndex = (_datas: T1[][]) => {
+      let sums = Array.from({length: numColumns}, (_, i) => 0);
+      for (let i = 0; i < numColumns; i++) {
+        let d = _datas[i];
+        if (JSON.stringify(d) != '{}') {
+          for (let j = 0; j < d.length; j++) {
+            sums[i] += Math.floor(d[j].dimension.height);
+          }
+        }
+      }
+      let min = Math.min(...sums);
+      return Math.max(
+        sums.findIndex(it => it == min),
+        0,
+      );
+    };
+
+    useEffect(() => {
+      let _datas: T1[][] = Array.from({length: numColumns}, (_, i) => []);
+      for (let i = 0; i < data.length; i++) {
+        let min = findMinColumnIndex(_datas);
+        _datas[min].push(data[i]);
+        for (let j = 0; j < _datas.length; j++) {
+          datas.push(min == j ? data[i] : Object.create(null));
+        }
+      }
+      setDatas(_datas);
+      return function () {};
+    }, [data]);
 
     return (
       <VirtualizedList
@@ -153,20 +180,15 @@ export const WaterfallWithDimensions = React.forwardRef(
           <View style={[{flexDirection: 'row'}, contentContainerStyle]}>
             {Array.from({length: numColumns}, (_, i) => (
               <View key={`Column ${i + 1}`}>
-                {data.map((__, _i) => {
-                  if (_i % numColumns == i) {
-                    return (
-                      <Animatable.View
-                        useNativeDriver={true}
-                        delay={(_i % pageSize) * animation.delay}
-                        animation={animation.type}
-                        duration={animation.duration}
-                        key={`Column ${i + 1} --> Datas[${_i}]`}>
-                        {props.renderItem(__, i, _i)}
-                      </Animatable.View>
-                    );
-                  } else {
+                {datas[i].map((__: T1, j: number) => {
+                  if (JSON.stringify(__) == '{}') {
                     return null;
+                  } else {
+                    return (
+                      <View key={`Column ${i + 1} --> Datas[${j}]`}>
+                        {renderItem(__, j)}
+                      </View>
+                    );
                   }
                 })}
               </View>
