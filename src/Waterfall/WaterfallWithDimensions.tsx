@@ -74,8 +74,8 @@ interface WaterfallRefProps {
  */
 
 export const WaterfallWithDimensions = React.forwardRef(
-  <T1 extends {dimensions: {height: number; width: number}}>(
-    props: WaterfallWithDimensionsProps<T1>,
+  <T extends {dimensions: {height: number; width: number}}>(
+    props: WaterfallWithDimensionsProps<T>,
     ref: React.Ref<WaterfallRefProps>,
   ) => {
     let waterfall = useRef();
@@ -94,6 +94,9 @@ export const WaterfallWithDimensions = React.forwardRef(
       onScroll,
       onEndReached,
       renderItem,
+      ListHeaderComponent = null,
+      ListFooterComponent = null,
+      ListEmptyComponent = null,
     } = props;
 
     const defaultProps = {
@@ -102,6 +105,9 @@ export const WaterfallWithDimensions = React.forwardRef(
       removeClippedSubviews,
       onEndReachedThreshold,
       scrollEventThrottle,
+      ListHeaderComponent,
+      ListFooterComponent,
+      ListEmptyComponent,
     };
 
     React.useImperativeHandle(ref, () => ({
@@ -112,7 +118,7 @@ export const WaterfallWithDimensions = React.forwardRef(
       },
     }));
 
-    const [datas, setDatas] = useState<T1[][]>(
+    const [datas, setDatas] = useState<T[][]>(
       Array.from({length: numColumns}, (_, i) => []),
     );
 
@@ -123,8 +129,7 @@ export const WaterfallWithDimensions = React.forwardRef(
      * @param _datas
      * @returns Math.max(0, index);
      */
-
-    const findMinColumnIndex = (_datas: T1[][]) => {
+    const findMinColumnIndex = (_datas: T[][]) => {
       let sums = Array.from({length: numColumns}, (_, i) => 0);
       for (let i = 0; i < numColumns; i++) {
         let d = _datas[i];
@@ -142,7 +147,7 @@ export const WaterfallWithDimensions = React.forwardRef(
     };
 
     useEffect(() => {
-      let _datas: T1[][] = Array.from({length: numColumns}, (_, i) => []);
+      let _datas: T[][] = Array.from({length: numColumns}, (_, i) => []);
       for (let i = 0; i < data.length; i++) {
         let min = findMinColumnIndex(_datas);
         _datas[min].push(data[i]);
@@ -165,9 +170,6 @@ export const WaterfallWithDimensions = React.forwardRef(
         style={[{flex: 1}, style]}
         onScroll={onScroll}
         keyExtractor={(item, index) => `react-native-miui`}
-        ListHeaderComponent={props?.ListHeaderComponent ?? null}
-        ListEmptyComponent={props?.ListEmptyComponent ?? null}
-        ListFooterComponent={props?.ListFooterComponent ?? null}
         onEndReached={info => {
           /**
            * 🐞 有可能刚进来的时候，`props.data` 还没进来，但是他认为已经到达底部了。

@@ -106,6 +106,9 @@ export const Waterfall = React.forwardRef(
       onScroll,
       onEndReached,
       renderItem,
+      ListHeaderComponent = null,
+      ListFooterComponent = null,
+      ListEmptyComponent = null,
     } = props;
 
     const defaultProps = {
@@ -114,6 +117,9 @@ export const Waterfall = React.forwardRef(
       removeClippedSubviews,
       onEndReachedThreshold,
       scrollEventThrottle,
+      ListHeaderComponent,
+      ListFooterComponent,
+      ListEmptyComponent,
     };
 
     React.useImperativeHandle(ref, () => ({
@@ -135,9 +141,6 @@ export const Waterfall = React.forwardRef(
         style={[{flex: 1}, style]}
         onScroll={onScroll}
         keyExtractor={(item, index) => `react-native-miui`}
-        ListHeaderComponent={props?.ListHeaderComponent ?? null}
-        ListEmptyComponent={props?.ListEmptyComponent ?? null}
-        ListFooterComponent={props?.ListFooterComponent ?? null}
         onEndReached={info => {
           /**
            * 🐞 有可能刚进来的时候，`props.data` 还没进来，但是他认为已经到达底部了。
