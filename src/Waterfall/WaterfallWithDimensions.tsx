@@ -74,8 +74,8 @@ interface WaterfallRefProps {
  */
 
 export const WaterfallWithDimensions = React.forwardRef(
-  <T extends {dimension: {height: number; width: number}}>(
-    props: WaterfallWithDimensionsProps<T>,
+  <T1 extends {dimensions: {height: number; width: number}}>(
+    props: WaterfallWithDimensionsProps<T1>,
     ref: React.Ref<WaterfallRefProps>,
   ) => {
     let waterfall = useRef();
@@ -112,7 +112,9 @@ export const WaterfallWithDimensions = React.forwardRef(
       },
     }));
 
-    const [datas, setDatas] = useState<T[][]>([]);
+    const [datas, setDatas] = useState<T1[][]>(
+      Array.from({length: numColumns}, (_, i) => []),
+    );
 
     /**
      * 更新 `datas` 前，当前所有列的最短的一列
@@ -121,13 +123,14 @@ export const WaterfallWithDimensions = React.forwardRef(
      * @param _datas
      * @returns Math.max(0, index);
      */
-    const findMinColumnIndex = (_datas: T[][]) => {
+
+    const findMinColumnIndex = (_datas: T1[][]) => {
       let sums = Array.from({length: numColumns}, (_, i) => 0);
       for (let i = 0; i < numColumns; i++) {
         let d = _datas[i];
         if (JSON.stringify(d) != '{}') {
           for (let j = 0; j < d.length; j++) {
-            sums[i] += Math.floor(d[j].dimension.height);
+            sums[i] += Math.floor(d[j].dimensions.height);
           }
         }
       }
@@ -139,7 +142,7 @@ export const WaterfallWithDimensions = React.forwardRef(
     };
 
     useEffect(() => {
-      let _datas: T[][] = Array.from({length: numColumns}, (_, i) => []);
+      let _datas: T1[][] = Array.from({length: numColumns}, (_, i) => []);
       for (let i = 0; i < data.length; i++) {
         let min = findMinColumnIndex(_datas);
         _datas[min].push(data[i]);
@@ -180,7 +183,7 @@ export const WaterfallWithDimensions = React.forwardRef(
           <View style={[{flexDirection: 'row'}, contentContainerStyle]}>
             {Array.from({length: numColumns}, (_, i) => (
               <View key={`Column ${i + 1}`}>
-                {datas[i].map((__: T, j: number) => {
+                {datas[i].map((__, j) => {
                   if (JSON.stringify(__) == '{}') {
                     return null;
                   } else {
