@@ -114,7 +114,7 @@ export const WaterfallWithDimensions = React.forwardRef(
       scrollToOffset: (params: ScrollToOffset) => {
         let {animated = false, y = 0} = params;
         // @ts-ignore
-        waterfall.current.scrollToOffset({animated, y});
+        waterfall.current.scrollToOffset({animated, offset: y});
       },
     }));
 
