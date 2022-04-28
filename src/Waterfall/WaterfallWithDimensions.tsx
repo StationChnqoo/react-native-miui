@@ -114,7 +114,7 @@ export const WaterfallWithDimensions = React.forwardRef(
       scrollToOffset: (params: ScrollToOffset) => {
         let {animated = false, y = 0} = params;
         // @ts-ignore
-        waterfall.current.scrollToOffset({animated, offset: y});
+        waterfall.current.scrollToOffset({animated, y});
       },
     }));
 
@@ -133,10 +133,8 @@ export const WaterfallWithDimensions = React.forwardRef(
       let sums = Array.from({length: numColumns}, (_, i) => 0);
       for (let i = 0; i < numColumns; i++) {
         let d = _datas[i];
-        if (JSON.stringify(d) != '{}') {
-          for (let j = 0; j < d.length; j++) {
-            sums[i] += Math.floor(d[j].dimensions.height);
-          }
+        for (let j = 0; j < d.length; j++) {
+          sums[i] += Math.floor(d[j]?.dimensions?.height ?? 0);
         }
       }
       let min = Math.min(...sums);
@@ -145,14 +143,15 @@ export const WaterfallWithDimensions = React.forwardRef(
         0,
       );
     };
-
+    
     useEffect(() => {
       let _datas: T[][] = Array.from({length: numColumns}, (_, i) => []);
       for (let i = 0; i < data.length; i++) {
         let min = findMinColumnIndex(_datas);
-        _datas[min].push(data[i]);
+        // _datas[min].push(data[i]);
+        /** 最小的列添加 `data[i]`，其他列添加 `Object.create(null)` */
         for (let j = 0; j < _datas.length; j++) {
-          datas.push(min == j ? data[i] : Object.create(null));
+          _datas[j].push(min == j ? data[i] : Object.create(null));
         }
       }
       setDatas(_datas);
